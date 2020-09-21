@@ -20,10 +20,38 @@ classdef descZernike
         function polynom = getPolynom( m, n )
             
             w = descZernike.resolution;
-            
+           
             % TODO Question 2 :
             polynom = zeros(w,w);
             
+% %           TODO : CHANGER LES BOUCLES SUR R ET THETA EN X ET Y ET
+% ASSOCIER LES RAYONS ET THETAS COMME IL FAUT
+%            
+            for r= 1:w 
+                
+                for theta =1 : w
+                    % Calcul de la composante radiale 
+                    radial = 0 ;
+            
+        %             Verifie que m-n est pair, m>0, 0<=n<=m
+                    if mod(m-n,2) == 0 && m>0 && n>=0 && n<=m   
+                
+                    for k = (m-abs(n))/2
+        %                 Fraction avec les factorielles 
+                        fraction = factorial(m-k) / (factorial(k) * factorial((m+abs(n))/2-k) * factorial((m-abs(n))/2-k  ) );
+                        radial = radial + (-1)^k * fraction * r^(m-2*k);
+            
+                    end
+                    
+                    polynom(r,theta) = radial * exp(i * n * theta);
+                    
+                    end
+                   
+                end 
+            
+            end 
+            
+       
         end
         
         % calcule tout un set de polynômes de Zernike
