@@ -24,12 +24,17 @@ classdef descZernike
             % TODO Question 2 :
             polynom = zeros(w,w);
             
-% %           TODO : CHANGER LES BOUCLES SUR R ET THETA EN X ET Y ET
-% ASSOCIER LES RAYONS ET THETAS COMME IL FAUT
-%            
-            for r= 1:w 
+            
+            for x= 1:w 
                 
-                for theta =1 : w
+                for y =1 : w
+                    
+%                   Distance Euclidienne entre l'origine de l'image et le
+%                   pixel
+                    r = sqrt(power(x, 2) + power(y,2));
+%                     Angle entre l'axe (Ox) et le pixel
+                    theta = atan(y/x);
+                    
                     % Calcul de la composante radiale 
                     radial = 0 ;
             
@@ -42,6 +47,8 @@ classdef descZernike
                         radial = radial + (-1)^k * fraction * r^(m-2*k);
             
                     end
+                    i,
+                    radial * exp(i * n * theta),
                     
                     polynom(r,theta) = radial * exp(i * n * theta);
                     
