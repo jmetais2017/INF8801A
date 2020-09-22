@@ -21,44 +21,51 @@ classdef descZernike
             
             w = descZernike.resolution;
            
-            % TODO Question 2 :
-            polynom = zeros(w,w);
+%             Initialisation du polynome 
+            polynom = zeros(w,w);            
+%             Valeurs centrées entre [-1,1]
+            x = linspace(-1,1,w);
+            
+            [X,Y] = meshgrid(x,x);
+%             Calcul de rho 
+            rhos = sqrt(X.^2 + Y.^2);
+%             Calcul de theta
+            thetas = atan2(Y,X);
             
             
-            for x= 1:w 
-                
-                for y =1 : w
+             for p=1:w 
+                 
+                 for l=1:w
+                     
+ %                   Distance Euclidienne entre l'origine de l'image et le
+ %                   pixel
+                     r = rhos(p,l);
+ %                     Angle entre l'axe (Ox) et le pixel
+                     theta = thetas(p,l);
+                     
+                     % Calcul de la composante radiale 
+                     radial = 0 ;
+             
+         %             Verifie que m-n est pair, m>0, 0<=n<=m
+%                      if mod(m-n,2) == 0 && m>0 && n>=0 && n<=m   
+                 
+                     for k = (m-abs(n))/2
+         %                 Fraction avec les factorielles 
+                         fraction = factorial(m-k) / (factorial(k) * factorial((m+abs(n))/2-k) * factorial((m-abs(n))/2-k  ) );
+                         radial = radial + (-1)^k * fraction * r^(m-2*k);
+             
+                     end
                     
-%                   Distance Euclidienne entre l'origine de l'image et le
-%                   pixel
-                    r = sqrt(power(x, 2) + power(y,2));
-%                     Angle entre l'axe (Ox) et le pixel
-                    theta = atan(y/x);
+                     
+                     polynom(p,l) = radial * exp(i * n * theta);
+                     
+%                      end
                     
-                    % Calcul de la composante radiale 
-                    radial = 0 ;
-            
-        %             Verifie que m-n est pair, m>0, 0<=n<=m
-                    if mod(m-n,2) == 0 && m>0 && n>=0 && n<=m   
-                
-                    for k = (m-abs(n))/2
-        %                 Fraction avec les factorielles 
-                        fraction = factorial(m-k) / (factorial(k) * factorial((m+abs(n))/2-k) * factorial((m-abs(n))/2-k  ) );
-                        radial = radial + (-1)^k * fraction * r^(m-2*k);
-            
-                    end
-                    i,
-                    radial * exp(i * n * theta),
-                    
-                    polynom(r,theta) = radial * exp(i * n * theta);
-                    
-                    end
-                   
-                end 
-            
-            end 
-            
-       
+                 end 
+             
+             end 
+             
+      
         end
         
         % calcule tout un set de polynômes de Zernike
@@ -97,7 +104,7 @@ classdef descZernike
              % on recentre et redimensionne la forme
              dst = shape( max(1,yCenter-rMax) : min(yCenter+rMax,h), ...
                  max(1,xCenter-rMax) : min(xCenter+rMax,w) );
-             dst = imresize(dst,size(shape));
+             dst = imre(dst,size(shape));
         end
     end
     
@@ -111,7 +118,41 @@ classdef descZernike
          function dst = descZernike(shape)
              
              % TODO Question 2 :
-             dst.values = zeros(1,descZernike.descSize);
+%              size(descZernike.polynoms),
+%              size(shape),
+             
+%              size(dst.values),
+%              size(shape),
+%              size(descZernike.polynoms(:,:,1)),
+
+               [w,w,degre] = size(descZernike.polynoms);
+                dst.values = zeros(1,degre);
+                new_shape = rescale(shape);
+                                
+                for i=1:degre 
+                
+                    somme = 0;
+                    
+                    for x=1:w 
+                        
+                        for y=1:w 
+                            
+%                             somme,new_shape(x,y), descZernike.polynoms(x,y,i),
+                            somme = somme + new_shape(x,y) * abs(descZernike.polynoms(x,y,i)); 
+                            
+                            
+                        end 
+                        
+                        
+                    end 
+                    
+                    dst.values(i) = somme ;
+                end
+                
+                            
+
+
+
          end
          
         % distance entre deux descripteurs
