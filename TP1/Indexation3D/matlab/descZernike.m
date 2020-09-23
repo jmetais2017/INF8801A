@@ -31,8 +31,7 @@ classdef descZernike
             rhos = sqrt(X.^2 + Y.^2);
 %             Calcul de theta
             thetas = atan2(Y,X);
-            
-            
+           
              for p=1:w 
                  
                  for l=1:w
@@ -45,10 +44,7 @@ classdef descZernike
                      
                      % Calcul de la composante radiale 
                      radial = 0 ;
-             
-         %             Verifie que m-n est pair, m>0, 0<=n<=m
-%                      if mod(m-n,2) == 0 && m>0 && n>=0 && n<=m   
-                 
+                              
                      for k = (m-abs(n))/2
          %                 Fraction avec les factorielles 
                          fraction = factorial(m-k) / (factorial(k) * factorial((m+abs(n))/2-k) * factorial((m-abs(n))/2-k  ) );
@@ -56,10 +52,7 @@ classdef descZernike
              
                      end
                     
-                     
                      polynom(p,l) = radial * exp(i * n * theta);
-                     
-%                      end
                     
                  end 
              
@@ -118,15 +111,12 @@ classdef descZernike
          function dst = descZernike(shape)
              
              % TODO Question 2 :
-%              size(descZernike.polynoms),
-%              size(shape),
-             
-%              size(dst.values),
-%              size(shape),
-%              size(descZernike.polynoms(:,:,1)),
+
 
                [w,w,degre] = size(descZernike.polynoms);
                 dst.values = zeros(1,degre);
+%                 On redimensionne la forme afin qu'elle occupe tout le
+%                 disque unitaire 
                 new_shape = rescale(shape);
                                 
                 for i=1:degre 
@@ -138,7 +128,7 @@ classdef descZernike
                         for y=1:w 
                             
 %                             somme,new_shape(x,y), descZernike.polynoms(x,y,i),
-                            somme = somme + new_shape(x,y) * abs(descZernike.polynoms(x,y,i)); 
+                            somme = somme + new_shape(x,y) * abs(descZernike.polynoms(x,y,i)) * 2/power(w,2); 
                             
                             
                         end 
