@@ -28,7 +28,7 @@ classdef descZernike
             
             [X,Y] = meshgrid(x,x);
 %             Calcul de rho 
-            rhos = sqrt(X.^2 + Y.^2);
+            rhos = sqrt(X^2 + Y^2);
 %             Calcul de theta
             thetas = atan2(Y,X);
            
@@ -51,8 +51,8 @@ classdef descZernike
                          radial = radial + (-1)^k * fraction * r^(m-2*k);
              
                      end
-                    
-                     polynom(p,l) = radial * exp(i * n * theta);
+%                       Polynome 
+                     polynom(p,l) = radial * exp(i * m * theta);
                     
                  end 
              
@@ -114,35 +114,21 @@ classdef descZernike
 
 
                [w,w,degre] = size(descZernike.polynoms);
-                dst.values = zeros(1,degre);
+%              Initialisation 
+               dst.values = zeros(1,degre);
 %                 On redimensionne la forme afin qu'elle occupe tout le
 %                 disque unitaire 
                 new_shape = rescale(shape);
-                                
+%               Boucle sur les degrés
                 for i=1:degre 
-                
-                    somme = 0;
                     
-                    for x=1:w 
-                        
-                        for y=1:w 
-                            
-%                             somme,new_shape(x,y), descZernike.polynoms(x,y,i),
-                            somme = somme + new_shape(x,y) * abs(descZernike.polynoms(x,y,i)) * 2/power(w,2); 
-                            
-                            
-                        end 
-                        
-                        
-                    end 
+%                    On multiplie la forme avec le polynome 
+                    somme = new_shape .* descZernike.polynoms(:,:,i) ;                    
                     
-                    dst.values(i) = somme ;
+%                     Somme le tout 
+                    dst.values(i) = abs(sum(somme(:))) ;
                 end
                 
-                            
-
-
-
          end
          
         % distance entre deux descripteurs
