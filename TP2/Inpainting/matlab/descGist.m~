@@ -41,12 +41,9 @@ classdef descGist
                    
                    
                  theta = rotations(angle);
-%                 Longueur d onde 
-                 lda = descGist.filterSize/(2^(descGist.nbScales-scale+1)) ;
-%                 Gaussienne en X
-                 sigmaX = descGist.filterSize/(2^(descGist.nbScales-scale+1));
-%                  Gaussienne en Y
-                 sigmaY = descGist.filterSize/(2^(descGist.nbScales-scale+1));
+                 lda = descGist.filterSize/(3^(descGist.nbScales-scale)) ;
+                 sigmaX = descGist.filterSize/(3^(descGist.nbScales-scale));
+                 sigmaY = descGist.filterSize/(2^(descGist.nbScales-scale));
                
                    
                 filters(:,:,scale,angle) = descGist.getGabor(theta,lda, sigmaX, sigmaY);
@@ -128,12 +125,9 @@ classdef descGist
            dst.values = zeros( descGist.gridSize, descGist.gridSize, descGist.nbScales, descGist.nbOri);
            % TODO : Question 1
            
-%            Boucle sur l echelle 
            for scale = 1 : descGist.nbScales 
-%                Boucle sur l angle
                for angle = 1 : descGist.nbOri 
-%                     Valeur absolue de la valeur moyenne redimensionner en
-%                     4x4 
+                    
                    dst.values(:,:,scale,angle) = imresize(abs(imfilter(src, descGist.filters(:,:,scale,angle))), [descGist.gridSize descGist.gridSize]); 
             
                end 
