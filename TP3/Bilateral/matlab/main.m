@@ -49,16 +49,16 @@ figure; imshow(src); title('Gaussian');
 
 src = double(imread([srcFolder 'low' ext])) + double(imread([srcFolder 'mid' ext])) + double(imread([srcFolder 'high' ext]));
 
-sigmaSpatial = 10;
-edgeMin = min(src(:));
-edgeMax = max(src(:));
+% Utilisation d'un patch pour observer le bruit de l'image 
+patch = imcrop(src,[50,50,50,50]);
+% Calcul de la variance du bruit 
+patchVar = std2(patch)^2;
+% Degree de variation du filtre doit etre superieur au bruit de l'image 
+degree = 2*patchVar;
+bilateral = imbilatfilt(src,degree,2);
 
-% bilateral = bilateralFilter(rgb2gray(src), [], edgeMin, edgeMax, sigmaSpatial ,sigmaSpatial, sigmaSpatial );
-
-bilateral = imbilatfilt(src);
-
+% Filtre passe-haut 
 src = src - bilateral;
-
 figure; imshow(src); title('Bilateral');
 
 
