@@ -12,11 +12,16 @@ function [ loop ] = clone( src, nbClones )
     % TODO : Question 2
     minLength = 25; %Longueur minimale des boucles considérées
     
-    h = size(src, 1) %Résolution de la séquence vidéo
-    w = size(src, 2)
+    h = size(src, 1); %Résolution de la séquence vidéo
+    w = size(src, 2);    
     
     dst = double(src) / 255.0;
     [startFrame, endFrame] = getBestLoop(src, minLength); %Extraction d'une boucle
+    if startFrame > endFrame
+        mem = startFrame;
+        startFrame = endFrame;
+        endFrame = mem;
+    end
     loop = dst(:,:,:,startFrame:endFrame-1);
     
     loopLength = endFrame - startFrame; %Longueur de la boucle extraite
