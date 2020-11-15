@@ -1,0 +1,29 @@
+%BERNARD Clément et METAIS Julien
+function [ energy ] = getEnergy( img )
+%GETENERGY Retourne la carte d'énergie des pixels d'une image
+%   Diverses possibilités : Norme L1, L2, L2^2 du gradient, Saillance,
+%   Détecteur de Harris, Détection de visage, entropie, etc...
+%   La fonction doit pouvoir fonctionner avec un nombre indéfini de canaux !
+
+	% TODO : Question 1
+%     energy = ones(size(img,1),size(img,2));
+    
+      % Calcul du gradient 
+      [Fx,Fy] = gradient(img);
+      % Norme L2 
+      energies = sqrt(Fx.^2 + Fy.^2); 
+      % Somme sur tous les channels 
+      energy = zeros(size(energies,1) , size(energies, 2)     );
+      
+      for c = 1 : size(energies, 3) 
+          
+          energy(:,:,c) = 
+          
+      end 
+      
+      energy = sum(energy , 3 );
+    
+    
+    
+end
+
